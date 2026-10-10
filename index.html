@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MPI Sad Darsana — Pendakian Candi Lontar (Kelas 11)</title>
+  <style>
+    :root{
+      --bg1:#EAF3FF;         /* Cute Royal Blue */
+      --bg2:#D9E8FF;
+      --card:#ffffffcc;
+      --ink:#0b1b3a;
+      --muted:#47607d;
+      --royal:#3B82F6;
+      --royal2:#60A5FA;
+      --gold:#F6C453;
+      --gold2:#FFD98E;
+      --good:#22c55e;
+      --bad:#ef4444;
+      --shadow: 0 18px 60px rgba(15,23,42,.18);
+      --shadow2: 0 10px 30px rgba(59,130,246,.18);
+      --ring: 0 0 0 3px rgba(59,130,246,.25);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 600px at 20% 0%, #ffffff 0%, transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, #fff7e0 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    /* Floating golden sparkle */
+    .sparkle{
+      position:absolute;
+      width:10px;height:10px;
+      background: radial-gradient(circle, rgba(255,217,142,1) 0%, rgba(246,196,83,1) 35%, rgba(246,196,83,0) 70%);
+      border-radius:50%;
+      filter: drop-shadow(0 0 10px rgba(246,196,83,.8));
+      pointer-events:none;
+      animation: twinkle 1.8s infinite ease-in-out;
+      opacity:.95;
+    }
+    @keyframes twinkle{
+      0%,100%{ transform: translateY(0) scale(.85); opacity:.65; }
+      50%{ transform: translateY(-12px) scale(1.15); opacity:1; }
+    }
+
+    /* Top bar */
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(90deg, rgba(255,255,255,.72), rgba(255,255,255,.38));
+      border-bottom:1px solid rgba(59,130,246,.15);
+    }
+    .wrap{
+      width:min(1100px, 92vw);
+      margin:0 auto;
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:14px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.9), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, #2f6fe8, #8cc3ff);
+      box-shadow: var(--shadow2);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo::after{
+      content:"";
+      position:absolute; inset:-30%;
+      background: conic-gradient(from 120deg, rgba(255,217,142,0), rgba(255,217,142,.85), rgba(255,217,142,0));
+      animation: spinGlow 3s linear infinite;
+      opacity:.7;
+    }
+    @keyframes spinGlow{ to{ transform: rotate(360deg); } }
+    .brand small{
+      display:block; font-weight:700; color:var(--muted); margin-top:2px;
+    }
+
+    /* Layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 270px 1fr;
+      gap:18px;
+      padding:18px 0 42px;
+      align-items:start;
+    }
+    @media (max-width: 940px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* Sidebar */
+    .sidebar{
+      background: var(--card);
+      border:1px solid rgba(59,130,246,.18);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow2);
+      padding:14px;
+      position:sticky;
+      top:92px;
+    }
+    @media (max-width: 940px){
+      .sidebar{ position:relative; top:auto; }
+    }
+    .greet{
+      padding:10px 10px 14px;
+      border-radius:14px;
+      background: linear-gradient(135deg, rgba(59,130,246,.14), rgba(246,196,83,.14));
+      border:1px solid rgba(246,196,83,.25);
+      margin-bottom:12px;
+    }
+    .greet h2{ margin:0; font-size:16px; }
+    .greet p{ margin:6px 0 0; color:var(--muted); font-weight:700; font-size:13px; }
+
+    .menu{
+      display:flex; flex-direction:column; gap:10px;
+      margin-top:12px;
+    }
+    .btn{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      border:none;
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      background: rgba(255,255,255,.6);
+      border:1px solid rgba(59,130,246,.16);
+      color:var(--ink);
+      box-shadow: 0 10px 25px rgba(15,23,42,.06);
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      font-weight:800;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 16px 30px rgba(15,23,42,.10); }
+    .btn[aria-current="page"]{
+      background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(246,196,83,.16));
+      border-color: rgba(246,196,83,.35);
+      box-shadow: 0 0 0 3px rgba(246,196,83,.18);
+    }
+    .btn .left{
+      display:flex; align-items:center; gap:10px;
+    }
+    .chip{
+      font-size:12px;
+      padding:4px 8px;
+      background: rgba(246,196,83,.25);
+      border:1px solid rgba(246,196,83,.35);
+      border-radius:999px;
+      color:#7a4a00;
+      font-weight:900;
+    }
+
+    /* Main content card */
+    .main{
+      background: var(--card);
+      border:1px solid rgba(59,130,246,.18);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .mainHeader{
+      padding:16px 18px;
+      border-bottom:1px solid rgba(59,130,246,.14);
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      background:
+        radial-gradient(800px 160px at 20% 0%, rgba(246,196,83,.18), transparent 55%),
+        linear-gradient(90deg, rgba(59,130,246,.14), rgba(255,255,255,0));
+    }
+    .titleBlock h1{
+      margin:0; font-size:18px;
+    }
+    .titleBlock p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-weight:700;
+      font-size:13px;
+    }
+
+    .hud{
+      display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-end;
+    }
+    .hudItem{
+      padding:10px 12px;
+      border-radius:14px;
+      background: rgba(255,255,255,.65);
+      border:1px solid rgba(59,130,246,.16);
+      min-width:150px;
+    }
+    .hudLabel{
+      color:var(--muted);
+      font-weight:800;
+      font-size:12px;
+      margin-bottom:6px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .hudValue{
+      font-weight:1000;
+      font-size:16px;
+      display:flex; align-items:center; gap:10px; justify-content:space-between;
+    }
+
+    .hearts{
+      display:flex; gap:6px; align-items:center;
+      font-size:18px;
+    }
+    .heart{
+      filter: drop-shadow(0 8px 12px rgba(239,68,68,.25));
+      transform-origin:center;
+      animation: pulseHeart 1.2s infinite ease-in-out;
+    }
+    @keyframes pulseHeart{
+      0%,100%{ transform: scale(1); opacity:1; }
+      50%{ transform: scale(1.08); opacity:.95; }
+    }
+    .heart.inactive{ opacity:.25; filter: grayscale(1) drop-shadow(0 8px 12px rgba(0,0,0,.1)); animation:none; }
+
+    .bar{
+      width:100%;
+      height:10px;
+      border-radius:999px;
+      background: rgba(59,130,246,.12);
+      border:1px solid rgba(59,130,246,.18);
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .bar > i{
+      display:block; height:100%;
+      width:40%;
+      background: linear-gradient(90deg, var(--royal), var(--gold));
+      border-radius:999px;
+      box-shadow: inset 0 0 10px rgba(255,255,255,.45);
+    }
+
+    /* Sections */
+    .section{
+      padding:18px;
+      display:none;
+    }
+    .section.active{ display:block; }
+
+    /* Learn page */
+    .cards2{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+    @media (max-width: 900px){
+      .cards2{ grid-template-columns:1fr; }
+    }
+    .infoCard{
+      background: rgba(255,255,255,.72);
+      border:1px solid rgba(59,130,246,.14);
+      border-radius:16px;
+      padding:14px;
+      box-shadow: 0 10px 30px rgba(15,23,42,.06);
+      position:relative;
+      overflow:hidden;
+    }
+    .infoCard::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(circle at 20% 0%, rgba(246,196,83,.22), transparent 55%);
+      pointer-events:none;
+    }
+    .infoCard h3{ margin:0 0 8px; font-size:15px; }
+    .infoCard p{ margin:0; color:var(--muted); font-weight:650; font-size:13px; line-height:1.5; }
+
+    .tagRow{
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;
+    }
+    .tag{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(246,196,83,.35);
+      background: rgba(246,196,83,.18);
+      color:#7a4a00;
+      font-weight:900;
+      font-size:12px;
+    }
+
+    /* Game (Pendakian) */
+    .scene{
+      position:relative;
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(59,130,246,.14);
+      background:
+        radial-gradient(900px 300px at 50% 0%, rgba(246,196,83,.20), transparent 60%),
+        linear-gradient(180deg, rgba(59,130,246,.10), rgba(255,255,255,.0));
+      min-height:420px;
+    }
+    .sceneInner{
+      padding:16px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){
+      .sceneInner{ grid-template-columns:1fr; }
+    }
+
+    /* Tower steps */
+    .towerWrap{
+      position:relative;
+      height:100%;
+      min-height:360px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      padding-bottom:10px;
+    }
+    .tower{
+      width:100%;
+      max-width:440px;
+      height:320px;
+      position:relative;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      perspective:900px;
+    }
+    .steps{
+      position:absolute;
+      bottom:0; left:50%;
+      transform: translateX(-50%);
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:center;
+    }
+    .step{
+      width:78%;
+      height:48px;
+      border-radius:16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(59,130,246,.12));
+      border:1px solid rgba(59,130,246,.16);
+      box-shadow: 0 14px 30px rgba(15,23,42,.06);
+      position:relative;
+      overflow:hidden;
+    }
+    .step::after{
+      content:"";
+      position:absolute; inset:-30%;
+      background: conic-gradient(from 180deg, rgba(246,196,83,0), rgba(246,196,83,.35), rgba(246,196,83,0));
+      transform: rotate(0deg);
+      animation: shimmer 2.8s linear infinite;
+      opacity:.55;
+    }
+    @keyframes shimmer { to{ transform: rotate(360deg);} }
+    .step.active{
+      border-color: rgba(246,196,83,.5);
+      background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(246,196,83,.18));
+      box-shadow: 0 0 0 3px rgba(246,196,83,.18), 0 20px 40px rgba(246,196,83,.12);
+    }
+
+    /* Satria / icon */
+    .pilgrim{
+      position:absolute;
+      bottom:8px;
+      left:50%;
+      transform: translateX(-50%);
+      width:56px; height:56px;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,.85), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, #2563eb, #93c5fd);
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow: 0 18px 40px rgba(37,99,235,.25);
+      display:flex; align-items:center; justify-content:center;
+      font-size:26px;
+      z-index:5;
+      transition: transform .6s cubic-bezier(.2,.9,.2,1), bottom .6s cubic-bezier(.2,.9,.2,1);
+      will-change: transform,bottom;
+    }
+
+    /* Kuis balloon */
+    .balloon{
+      position:absolute;
+      width:140px;
+      height:110px;
+      right:10px; top:20px;
+      border-radius:24px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.95), rgba(255,255,255,0) 55%),
+        linear-gradient(135deg, rgba(59,130,246,.25), rgba(246,196,83,.22));
+      border:1px solid rgba(246,196,83,.4);
+      box-shadow: 0 16px 40px rgba(246,196,83,.18);
+      display:flex; align-items:center; justify-content:center;
+      text-align:center;
+      padding:10px;
+      z-index:4;
+      animation: floatBalloon 2.8s ease-in-out infinite;
+    }
+    @keyframes floatBalloon{
+      0%,100%{ transform: translateY(0) rotate(-1deg); }
+      50%{ transform: translateY(-10px) rotate(1deg); }
+    }
+    .balloon strong{
+      font-weight:1000;
+      font-size:13px;
+      color:#0b1b3a;
+      line-height:1.2;
+    }
+    .balloon .hint{
+      margin-top:6px;
+      font-weight:900;
+      font-size:12px;
+      color:#7a4a00;
+    }
+
+    /* Stars */
+    .starField{
+      position:absolute; inset:0;
+      pointer-events:none;
+      z-index:1;
+      opacity:.95;
+    }
+    .star{
+      position:absolute;
+      width:8px; height:8px;
+      background: radial-gradient(circle, rgba(255,217,142,1), rgba(246,196,83,.2) 60%, rgba(246,196,83,0) 70%);
+      border-radius:2px;
+      transform: rotate(45deg);
+      filter: drop-shadow(0 0 10px rgba(246,196,83,.7));
+      animation: starPop 1.4s infinite ease-in-out;
+    }
+    @keyframes starPop{
+      0%,100%{ transform: translateY(0) rotate(45deg) scale(.9); opacity:.55;}
+      50%{ transform: translateY(-10px) rotate(45deg) scale(1.1); opacity:1;}
+    }
+
+    /* Question panel */
+    .panel{
+      background: rgba(255,255,255,.78);
+      border:1px solid rgba(59,130,246,.16);
+      border-radius:18px;
+      padding:14px;
+      box-shadow: 0 12px 28px rgba(15,23,42,.06);
+      position:relative;
+      z-index:3;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:360px;
+    }
+
+    .qTop{
+      display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+      border-bottom:1px dashed rgba(59,130,246,.25);
+      padding-bottom:10px;
+    }
+    .qTitle{
+      font-weight:1000;
+    }
+    .qMeta{
+      text-align:right;
+      color:var(--muted);
+      font-weight:850;
+      font-size:12px;
+    }
+    .qText{
+      font-weight:900;
+      font-size:15px;
+      line-height:1.45;
+    }
+
+    .choices{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .choice{
+      border-radius:14px;
+      padding:12px 12px;
+      cursor:pointer;
+      border:1px solid rgba(59,130,246,.16);
+      background: rgba(255,255,255,.7);
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+      font-weight:900;
+      display:flex; gap:12px; align-items:flex-start;
+      user-select:none;
+    }
+    .choice:hover{ transform: translateY(-1px); box-shadow: 0 16px 30px rgba(15,23,42,.08); }
+    .choice .letter{
+      width:28px; height:28px;
+      border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(59,130,246,.14);
+      border:1px solid rgba(59,130,246,.20);
+      font-weight:1000;
+      flex:0 0 auto;
+    }
+    .choice.correct{
+      border-color: rgba(34,197,94,.55);
+      background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(255,255,255,.7));
+    }
+    .choice.wrong{
+      border-color: rgba(239,68,68,.55);
+      background: linear-gradient(135deg, rgba(239,68,68,.16), rgba(255,255,255,.7));
+    }
+
+    .actions{
+      margin-top:auto;
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      padding-top:10px;
+      border-top:1px dashed rgba(59,130,246,.25);
+    }
+    .btnPrimary{
+      background: linear-gradient(135deg, rgba(59,130,246,.95), rgba(246,196,83,.75));
+      color:white;
+      border:none;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:1000;
+      cursor:pointer;
+      box-shadow: 0 18px 40px rgba(59,130,246,.22);
+      transition: transform .12s ease;
+      flex:1 1 160px;
+    }
+    .btnPrimary:hover{ transform: translateY(-1px); }
+    .btnGhost{
+      background: rgba(255,255,255,.7);
+      border:1px solid rgba(59,130,246,.16);
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:1000;
+      cursor:pointer;
+      flex:1 1 120px;
+    }
+    .btnSmall{
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:1000;
+    }
+
+    /* Map page */
+    .mapWrap{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      align-items:start;
+    }
+    @media (max-width: 900px){
+      .mapWrap{ grid-template-columns:1fr; }
+    }
+    .mapCard{
+      background: rgba(255,255,255,.74);
+      border:1px solid rgba(59,130,246,.14);
+      border-radius:18px;
+      padding:14px;
+      box-shadow: 0 10px 30px rgba(15,23,42,.06);
+      position:relative;
+      overflow:hidden;
+    }
+    .mapCard h3{ margin:0 0 8px; }
+    .mapCard p{ margin:0; color:var(--muted); font-weight:700; line-height:1.5; font-size:13px; }
+
+    .candiList{
+      display:flex; flex-direction:column; gap:10px; margin-top:12px;
+    }
+    .candiNode{
+      cursor:pointer;
+      border:1px solid rgba(246,196,83,.28);
+      background: linear-gradient(135deg, rgba(246,196,83,.12), rgba(255,255,255,.7));
+      border-radius:16px;
+      padding:12px;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+      box-shadow: 0 10px 24px rgba(246,196,83,.10);
+    }
+    .candiNode:hover{ transform: translateY(-1px); box-shadow: 0 16px 30px rgba(246,196,83,.16); }
+    .candiNode.active{ border-color: rgba(246,196,83,.55); box-shadow: 0 0 0 3px rgba(246,196,83,.18), 0 18px 40px rgba(246,196,83,.14); }
+
+    .candiNode .row{
+      display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
+    }
+    .candiIcon{
+      width:36px; height:36px; border-radius:14px;
+      background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(246,196,83,.25));
+      border:1px solid rgba(59,130,246,.18);
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px;
+      flex:0 0 auto;
+    }
+    .candiNode strong{ font-weight:1000; }
+    .candiNode small{ color:var(--muted); font-weight:800; display:block; margin-top:3px; }
+
+    .preview{
+      min-height:250px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .previewArt{
+      border-radius:18px;
+      border:1px dashed rgba(59,130,246,.25);
+      background:
+        radial-gradient(600px 250px at 20% 0%, rgba(59,130,246,.18), transparent 55%),
+        radial-gradient(500px 200px at 80% 0%, rgba(246,196,83,.22), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.2));
+      padding:16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .previewArt .stamp{
+      position:absolute; right:14px; top:14px;
+      width:54px; height:54px;
+      border-radius:18px;
+      background: rgba(246,196,83,.18);
+      border:1px solid rgba(246,196,83,.35);
+      display:flex; align-items:center; justify-content:center;
+      font-size:20px;
+      box-shadow: 0 16px 35px rgba(246,196,83,.18);
+    }
+    .previewArt h4{ margin:0 0 6px; font-size:16px; }
+    .previewArt p{ margin:0; color:var(--muted); font-weight:800; line-height:1.6; font-size:13px; }
+
+    /* Hint page */
+    .hintGrid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:12px;
+    }
+    @media (max-width: 900px){
+      .hintGrid{ grid-template-columns:1fr; }
+    }
+    .stepsList{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.8;
+      font-size:13px;
+    }
+    .callout{
+      background: linear-gradient(135deg, rgba(59,130,246,.15), rgba(246,196,83,.14));
+      border:1px solid rgba(246,196,83,.35);
+      border-radius:18px;
+      padding:14px;
+      box-shadow: 0 16px 40px rgba(246,196,83,.12);
+    }
+    .callout h3{ margin:0 0 8px; }
+    .callout p{ margin:0; color:var(--muted); font-weight:800; line-height:1.6; font-size:13px; }
+
+    /* Profile */
+    .profileGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 900px){
+      .profileGrid{ grid-template-columns:1fr; }
+    }
+    .kv{
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .kv label{
+      font-weight:900; color:var(--muted); font-size:12px;
+    }
+    .kv div{
+      font-weight:1000;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(59,130,246,.14);
+      background: rgba(255,255,255,.72);
+    }
+
+    /* Reflection */
+    .reflection{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      align-items:start;
+    }
+    @media (max-width: 900px){
+      .reflection{ grid-template-columns:1fr; }
+    }
+    textarea{
+      width:100%;
+      min-height:160px;
+      resize:vertical;
+      border-radius:16px;
+      border:1px solid rgba(59,130,246,.16);
+      padding:12px;
+      background: rgba(255,255,255,.72);
+      font-weight:800;
+      color:var(--ink);
+      outline:none;
+    }
+    textarea:focus{ box-shadow: var(--ring); }
+    .reflectList{
+      margin:0; padding-left:18px;
+      color:var(--muted); font-weight:850; line-height:1.8; font-size:13px;
+    }
+
+    /* Certificate */
+    .certWrap{
+      display:flex; gap:12px; flex-wrap:wrap;
+      align-items:flex-start;
+    }
+    .certPreview{
+      flex: 1 1 520px;
+      border-radius:18px;
+      border:1px solid rgba(246,196,83,.35);
+      background:
+        radial-gradient(900px 300px at 30% 0%, rgba(246,196,83,.20), transparent 55%),
+        linear-gradient(135deg, rgba(255,255,255,.8), rgba(246,196,83,.08));
+      box-shadow: 0 18px 60px rgba(246,196,83,.16);
+      padding:16px;
+      position:relative;
+      overflow:hidden;
+      min-height:320px;
+    }
+    .seal{
+      position:absolute;
+      right:14px; bottom:14px;
+      width:92px; height:92px;
+      border-radius:28px;
+      background: rgba(59,130,246,.14);
+      border:2px solid rgba(246,196,83,.55);
+      display:flex; align-items:center; justify-content:center;
+      font-size:36px;
+      transform: rotate(-8deg);
+      box-shadow: 0 16px 50px rgba(59,130,246,.20);
+    }
+    .certHeader{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      border-bottom:1px dashed rgba(59,130,246,.25);
+      padding-bottom:12px;
+      margin-bottom:12px;
+    }
+    .certHeader h2{
+      margin:0;
+      font-size:18px;
+      font-weight:1100;
+      letter-spacing:.3px;
+    }
+    .certHeader p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-weight:850;
+      font-size:13px;
+    }
+    .certBody{
+      padding:8px 0 6px;
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .certLine{
+      font-weight:1000;
+      font-size:15px;
+    }
+    .certName{
+      font-size:20px;
+      font-weight:1200;
+      background: linear-gradient(90deg, var(--royal), #7c3aed, var(--gold));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .certMeta{
+      display:flex; gap:12px; flex-wrap:wrap; margin-top:6px;
+    }
+    .pill{
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(59,130,246,.16);
+      background: rgba(255,255,255,.72);
+      font-weight:1000;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .certSide{
+      flex: 1 1 280px;
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .notice{
+      background: rgba(255,255,255,.72);
+      border:1px solid rgba(59,130,246,.14);
+      border-radius:18px;
+      padding:14px;
+      box-shadow: 0 10px 30px rgba(15,23,42,.06);
+    }
+    .notice h3{ margin:0 0 8px; }
+    .notice ul{ margin:0; padding-left:18px; color:var(--muted); font-weight:850; line-height:1.8; font-size:13px; }
+    .printBtn{
+      background: linear-gradient(135deg, rgba(59,130,246,.95), rgba(246,196,83,.75));
+      color:white;
+      border:none;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:1000;
+      cursor:pointer;
+      box-shadow: 0 18px 40px rgba(59,130,246,.22);
+    }
+
+    /* Footer */
+    .foot{
+      padding:16px 0 40px;
+      color:var(--muted);
+      font-weight:850;
+      font-size:12px;
+      text-align:center;
+    }
+
+    /* Accessibility */
+    .srOnly{
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sparkles -->
+  <div id="sparkleLayer" aria-hidden="true"></div>
+
+  <header>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            MPI Sad Darsana 🌟
+            <small>Ekspedisi Candi Lontar — Pendakian Kuil Suci</small>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div class="chip" id="sessionChip">Siap Mendaki!</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="greet">
+          <h2>✨ Om Swastiastu, <span id="userNameInline">Traveler</span></h2>
+          <p id="userMetaInline">Mari pelajari Sad Darsana dengan cara interaktif!</p>
+        </div>
+
+        <div class="menu">
+          <button class="btn" data-page="belajar" aria-current="page">
+            <span class="left">📚 Belajar</span><span class="chip">Mulai</span>
+          </button>
+          <button class="btn" data-page="peta">
+            <span class="left">🗺️ Peta Candi</span><span class="chip" id="mapChip">5</span>
+          </button>
+          <button class="btn" data-page="petunjuk">
+            <span class="left">🧭 Petunjuk</span><span class="chip">Tip</span>
+          </button>
+          <button class="btn" data-page="profil">
+            <span class="left">👤 Profil</span><span class="chip">Stats</span>
+          </button>
+          <button class="btn" data-page="refleksi">
+            <span class="left">📝 Refleksi</span><span class="chip">Isi</span>
+          </button>
+          <button class="btn" data-page="sertifikat" id="certMenuBtn">
+            <span class="left">🎓 Sertifikat</span><span class="chip" id="certChip">Belum</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <section class="main">
+        <div class="mainHeader">
+          <div class="titleBlock">
+            <h1 id="mainTitle">Belajar — Sad Darsana (Kuil Suci)</h1>
+            <p id="mainSubtitle">Kumpulkan pemahaman lewat kuis pendakian. Nyawa berkurang jika salah. Setiap benar naik tingkat! ✨</p>
+          </div>
+
+          <div class="hud" aria-label="HUD">
+            <div class="hudItem">
+              <div class="hudLabel">❤️ Nyawa / Tangkai Teratai</div>
+              <div class="hudValue">
+                <div class="hearts" id="heartsHUD" aria-label="Nyawa"></div>
+              </div>
+            </div>
+            <div class="hudItem">
+              <div class="hudLabel">🏅 Level & XP</div>
+              <div class="hudValue">
+                <span><span id="levelHUD">1</span> • <span id="xpHUD">0</span> XP</span>
+                <span style="color:#7a4a00; font-weight:1100;" id="nextHUD">→</span>
+              </div>
+              <div class="bar" aria-hidden="true"><i id="xpBar"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Belajar -->
+        <div class="section active" id="page-belajar">
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="cards2">
+              <div class="infoCard">
+                <h3>🌈 Sad Darsana dalam Pendakian</h3>
+                <p>
+                  Hadapi “tingkat” kuis di jalur candi. Kamu akan mendapat XP saat menjawab benar.
+                  Salah akan mengurangi nyawa ❤️.
+                </p>
+                <div class="tagRow">
+                  <span class="tag">Nyawa ❤️</span>
+                  <span class="tag">XP & Level 🏅</span>
+                  <span class="tag">Sertifikat 🎓</span>
+                </div>
+              </div>
+              <div class="infoCard">
+                <h3>✨ Balon Kuis & Bintang Emas</h3>
+                <p>
+                  Setiap soal muncul dalam balon kuis yang melayang. Jawaban tepat akan menyalakan bintang emas
+                  dan membuat satria “melompat” ke tingkat berikutnya.
+                </p>
+                <div class="tagRow">
+                  <span class="tag">Animasi Pendakian</span>
+                  <span class="tag">Pilihan Ganda</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Game Scene -->
+            <div class="scene" aria-label="Game Pendakian Candi">
+              <div class="starField" id="starField" aria-hidden="true"></div>
+
+              <div class="sceneInner">
+                <div class="towerWrap">
+                  <div class="balloon" id="balloonUI">
+                    <div>
+                      <strong>Balon Kuis Terbang! ✨</strong>
+                      <div class="hint" id="balloonHint">Siap jawab?</div>
+                    </div>
+                  </div>
+
+                  <div class="tower">
+                    <div class="steps" id="stepsUI" aria-hidden="true"></div>
+                    <div class="pilgrim" id="pilgrimUI" title="Satria Pendaki">
+                      🛡️
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel">
+                  <div class="qTop">
+                    <div class="qTitle">🎯 Soal Pendakian</div>
+                    <div class="qMeta">
+                      <div>Soal: <strong id="qIndexHUD">1</strong>/<span id="qTotalHUD">0</span></div>
+                      <div>Tingkat: <strong id="tierHUD">1</strong></div>
+                    </div>
+                  </div>
+
+                  <div class="qText" id="questionText">Klik “Mulai Pendakian” untuk memulai.</div>
+
+                  <div class="choices" id="choicesUI" aria-label="Pilihan Jawaban"></div>
+
+                  <div class="actions">
+                    <button class="btnPrimary" id="startBtn">
+                      ▶️ Mulai Pendakian
+                    </button>
+                    <button class="btnGhost btnSmall" id="nextBtn" style="display:none;">
+                      Berikutnya ⏭️
+                    </button>
+                    <button class="btnGhost btnSmall" id="restartBtn" style="display:none;">
+                      🔄 Ulangi
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="color:var(--muted); font-weight:850; font-size:12px; text-align:center;">
+              Tips: Jawab cepat & tepat! Saat nyawa habis, kamu bisa ulangi untuk mendapatkan skor & sertifikat.
+            </div>
+          </div>
+        </div>
+
+        <!-- Peta -->
+        <div class="section" id="page-peta">
+          <div class="mapWrap">
+            <div class="mapCard preview">
+              <h3>🗺️ Peta Candi Lontar</h3>
+              <p>
+                Pilih “Gerbang” untuk melihat ringkasan materi. Ini tidak mengubah skor—hanya membantu kamu
+                memahami jalur sebelum menjawab kuis.
+              </p>
+
+              <div class="candiList" id="candiListUI"></div>
+            </div>
+
+            <div class="mapCard previewArt">
+              <div class="stamp" id="previewStamp" aria-hidden="true">🏯</div>
+              <h4 id="previewTitle">Gerbang 1 — Sad Darsana</h4>
+              <p id="previewDesc">
+                Pilih salah satu gerbang di kiri untuk melihat penjelasan singkat.
+              </p>
+              <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                <span class="pill" id="previewTopic">Topik: —</span>
+                <span class="pill" id="previewFocus">Fokus: —</span>
+              </div>
+
+              <div style="margin-top:14px;">
+                <button class="btnPrimary" id="goFromMapBtn" type="button">
+                  🧭 Lanjut ke Kuis
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Petunjuk -->
+        <div class="section" id="page-petunjuk">
+          <div class="hintGrid">
+            <div class="mapCard">
+              <h3>🧭 Petunjuk Pendakian</h3>
+              <ul class="stepsList">
+                <li><b>Klik “Mulai Pendakian”</b> untuk memulai kuis.</li>
+                <li>Setiap soal adalah <b>pilihan ganda</b> (A–D).</li>
+                <li>
+                  Jika jawaban benar: kamu dapat <b>XP</b> dan satria melompat ke tingkat berikutnya ✨
+                </li>
+                <li>
+                  Jika jawaban salah: nyawa berkurang ❤️. Kalau nyawa habis, permainan berakhir.
+                </li>
+                <li>
+                  Setelah mencapai target (kelulusan), <b>sertifikat</b> akan terbuka otomatis.
+                </li>
+              </ul>
+            </div>
+
+            <div class="callout">
+              <h3>✨ Rekomendasi Strategi</h3>
+              <p>
+                Fokus pada konsep: <b>prinsip pengetahuan, sumber valid, tujuan pembebasan, dan cara pandang
+                metafisik</b> tiap darsana. Gunakan menu <b>Peta Candi</b> untuk review cepat.
+              </p>
+              <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+                <span class="tag">Review di Peta 🗺️</span>
+                <span class="tag">Jawab & Naik Tingkat</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profil -->
+        <div class="section" id="page-profil">
+          <div class="profileGrid">
+            <div class="mapCard">
+              <h3>👤 Profil & Progress</h3>
+              <div style="margin-top:12px; display:grid; gap:10px;">
+                <div class="kv">
+                  <label>Nama</label>
+                  <div id="profileName">—</div>
+                </div>
+                <div class="kv">
+                  <label>Kelas</label>
+                  <div>XI (Kelas 11)</div>
+                </div>
+                <div class="kv">
+                  <label>Status Sertifikat</label>
+                  <div id="profileCertStatus">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mapCard">
+              <h3>🏅 Statistik Kuis</h3>
+              <div style="margin-top:12px; display:grid; gap:10px;">
+                <div class="kv">
+                  <label>Skor Benar</label>
+                  <div id="profileCorrect">0</div>
+                </div>
+                <div class="kv">
+                  <label>Skor Salah</label>
+                  <div id="profileWrong">0</div>
+                </div>
+                <div class="kv">
+                  <label>Total XP</label>
+                  <div id="profileXP">0</div>
+                </div>
+                <div class="kv">
+                  <label>Level</label>
+                  <div id="profileLevel">1</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Refleksi -->
+        <div class="section" id="page-refleksi">
+          <div class="reflection">
+            <div class="mapCard">
+              <h3>📝 Refleksi Pembelajaran</h3>
+              <p style="margin:0 0 10px; color:var(--muted); font-weight:850; line-height:1.6; font-size:13px;">
+                Tulis refleksi singkat berdasarkan pengalamanmu saat menjawab kuis pendakian.
+              </p>
+              <label class="srOnly" for="reflectionText">Teks refleksi</label>
+              <textarea id="reflectionText" placeholder="Contoh: Hari ini saya belajar bahwa Sad Darsana membantu memahami..."></textarea>
+              <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btnPrimary" id="saveReflectionBtn" type="button">💾 Simpan Refleksi</button>
+                <button class="btnGhost" id="clearReflectionBtn" type="button">🧹 Hapus</button>
+              </div>
+            </div>
+
+            <div class="mapCard">
+              <h3>✨ Pertanyaan Pemantik</h3>
+              <ul class="reflectList">
+                <li>Apa konsep Sad Darsana yang paling kamu pahami?</li>
+                <li>Bagian mana yang paling menantang?</li>
+                <li>Strategi apa yang membantu kamu menjawab lebih tepat?</li>
+                <li>Bagaimana pemahaman ini bisa diterapkan dalam sikap belajar?</li>
+              </ul>
+              <div style="margin-top:12px; color:var(--muted); font-weight:850; font-size:12px;">
+                Data refleksi disimpan lokal di browser (LocalStorage).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sertifikat -->
+        <div class="section" id="page-sertifikat">
+          <div class="certWrap">
+            <div class="certPreview" id="certPreview">
+              <div class="certHeader">
+                <div>
+                  <h2>🎓 Sertifikat Kelulusan MPI Sad Darsana</h2>
+                  <p>Ekspedisi Candi Lontar • Pendakian Kuil Suci</p>
+                </div>
+                <div style="text-align:right;">
+                  <div class="pill" id="certIssued">Status: Menunggu...</div>
+                  <div class="pill" id="certCode">Kode: —</div>
+                </div>
+              </div>
+
+              <div class="certBody">
+                <div class="certLine">Diberikan kepada:</div>
+                <div class="certName" id="certName">—</div>
+                <div class="certLine">
+                  Telah menyelesaikan kuis pendakian Sad Darsana dengan hasil memenuhi kriteria kelulusan.
+                </div>
+
+                <div class="certMeta">
+                  <span class="pill" id="certScore">Skor: —</span>
+                  <span class="pill" id="certXP">XP: —</span>
+                  <span class="pill" id="certLevel">Level: —</span>
+                  <span class="pill" id="certDate">Tanggal: —</span>
+                </div>
+
+                <div style="margin-top:10px; color:var(--muted); font-weight:900; font-size:12px; line-height:1.6;">
+                  Catatan: Sertifikat terbit otomatis berdasarkan performa kuis (benar, XP, dan nyawa tersisa).
+                </div>
+              </div>
+
+              <div class="seal" aria-hidden="true">🪷</div>
+            </div>
+
+            <div class="certSide">
+              <div class="notice">
+                <h3>✅ Kriteria Kelulusan</h3>
+                <ul>
+                  <li>Benar minimal: <b>7</b> dari total soal</li>
+                  <li>XP minimal: <b>500</b></li>
+                  <li>Nyawa tersisa: minimal <b>1</b> (tidak harus terakhir, tapi tidak habis)</li>
+                </ul>
+              </div>
+
+              <div class="notice">
+                <h3>📌 Aksi</h3>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                  <button class="printBtn" id="printCertBtn" type="button">🖨️ Cetak Sertifikat</button>
+                  <button class="btnGhost" id="toBelajarBtn" type="button">↩️ Kembali Belajar</button>
+                </div>
+                <div style="margin-top:10px; color:var(--muted); font-weight:850; font-size:12px;">
+                  Cetak akan bekerja setelah sertifikat “Terbit”.
+                </div>
+              </div>
+
+              <div class="notice">
+                <h3>🎯 Sertifikat Progress</h3>
+                <div style="margin-top:10px; color:var(--muted); font-weight:900; font-size:13px;">
+                  <div>Benar: <b id="certNeedCorrect">0</b></div>
+                  <div>XP: <b id="certNeedXP">0</b></div>
+                  <div>Nyawa: <b id="certNeedHearts">0</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <div class="foot">✨ Dibuat untuk pembelajaran interaktif Sad Darsana (Kelas 11) — tema “Ekspedisi Candi Lontar”.</div>
+  </main>
+
+  <script>
+    /***********************
+     * Data & Game Config
+     ***********************/
+    const game = {
+      maxHearts: 5,
+      hearts: 5,
+      xp: 0,
+      level: 1,
+      xpPerCorrect: 90,     // tuning
+      xpPerWrong: 0,
+      xpNeededBase: 300,    // for level 1->2
+      levelGap: 120,        // increases per level
+
+      // kelulusan:
+      requiredCorrect: 7,
+      requiredXP: 500,
+      requiredHeartsLeft: 1,
+
+      // bank soal:
+      questions: [
+        {
+          id: "SD-1",
+          materi: "Nyaya-Vaisesika",
+          soal: "Dalam Nyaya-Vaisesika, tujuan utama pemahaman adalah mencapai pembebasan melalui …",
+          pilihan: [
+            "penguasaan konsentrasi semata",
+            "pengetahuan tentang realitas (tattwa) dan metode penalaran yang benar",
+            "ritual tanpa pengetahuan",
+            "kebiasaan menyendiri tanpa belajar"
+          ],
+          benar: 1,
+          tier: 1
+        },
+        {
+          id: "SD-2",
+          materi: "Samkhya",
+          soal: "Dalam filsafat Samkhya, konsep paling mendasar yang membedakan realitas adalah …",
+          pilihan: [
+            "Brahman sebagai satu-satunya realitas",
+            "Purusha dan Prakriti sebagai dua prinsip utama",
+            "Atman tidak ada",
+            "Semua realitas berubah menjadi maya total"
+          ],
+          benar: 1,
+          tier: 1
+        },
+        {
+          id: "SD-3",
+          materi: "Yoga",
+          soal: "Dalam Yoga, jalan pembebasan ditempuh melalui latihan mental dan disiplin untuk mengendalikan …",
+          pilihan: [
+            "nafsu dan pikiran agar tetap bergerak tanpa arah",
+            "indria dan fluktuasi pikiran (citta-vritti) secara terarah",
+            "hanya berdoa tanpa praktik",
+            "membandingkan diri dengan orang lain"
+          ],
+          benar: 1,
+          tier: 2
+        },
+        {
+          id: "SD-4",
+          materi: "Mimamsa",
+          soal: "Mimamsa menekankan pentingnya …",
+          pilihan: [
+            "membatalkan seluruh ajaran vedik",
+            "penafsiran dan pelaksanaan ajaran dharma berdasar Veda",
+            "menghindari tugas sosial sepenuhnya",
+            "menganggap ritual tidak relevan"
+          ],
+          benar: 1,
+          tier: 2
+        },
+        {
+          id: "SD-5",
+          materi: "Vedanta (Uttara Mimamsa)",
+          soal: "Dalam Vedanta, inti pencarian spiritual mengarah pada pemahaman tentang …",
+          pilihan: [
+            "keabadian Atman dan realitas terdalam (Brahman) secara benar",
+            "bahwa semua pengalaman tidak bermakna sama sekali",
+            "penolakan total terhadap pengetahuan",
+            "mengutamakan tindakan tanpa pemahaman"
+          ],
+          benar: 0,
+          tier: 3
+        },
+        {
+          id: "SD-6",
+          materi: "Metafisika Sad Darsana",
+          soal: "Perbedaan perspektif antar darsana biasanya terletak pada …",
+          pilihan: [
+            "tujuan spiritual yang sama sekali berbeda untuk semua",
+            "cara pandang tentang sumber pengetahuan, realitas, dan metode mencapai pembebasan",
+            "hanya pada bahasa yang digunakan",
+            "hanya pada gaya ritual"
+          ],
+          benar: 1,
+          tier: 3
+        },
+        {
+          id: "SD-7",
+          materi: "Tujuan Pembebasan",
+          soal: "Yang menjadi tujuan pembelajaran filsafat (termasuk Sad Darsana) adalah …",
+          pilihan: [
+            "memperbanyak debat tanpa hasil",
+            "menemukan jalan yang menuntun pada kebebasan dari kekeliruan dan penderitaan",
+            "mencari kemenangan dalam permainan",
+            "menghindari proses belajar"
+          ],
+          benar: 1,
+          tier: 4
+        },
+        {
+          id: "SD-8",
+          materi: "Pengetahuan & Sikap",
+          soal: "Sikap belajar yang selaras dengan spirit Sad Darsana adalah …",
+          pilihan: [
+            "asal menjawab tanpa memahami alasan",
+            "menguji pemahaman, disiplin, dan menerapkan prinsip dalam kehidupan",
+            "mengabaikan umpan balik",
+            "fokus pada hasil instan tanpa proses"
+          ],
+          benar: 1,
+          tier: 4
+        }
+      ]
+    };
+
+    // Candi / Gerbang Peta
+    const candiNodes = [
+      {
+        id: 1,
+        judul: "Gerbang 1 — Nyaya & Vaisesika",
+        icon: "🔎",
+        topic: "Penalaran & Realitas",
+        focus: "Metode pengetahuan yang benar",
+        desc:
+          "Fokus pada cara berpikir logis untuk mengenali realitas dan langkah menuju pembebasan."
+      },
+      {
+        id: 2,
+        judul: "Gerbang 2 — Samkhya",
+        icon: "🌿",
+        topic: "Purusha & Prakriti",
+        focus: "Dua prinsip utama",
+        desc:
+          "Mempelajari pemisahan antara kesadaran (Purusha) dan materi/manifestasi (Prakriti) untuk memahami hakikat."
+      },
+      {
+        id: 3,
+        judul: "Gerbang 3 — Yoga",
+        icon: "🧘",
+        topic: "Disiplin Mental",
+        focus: "Pengendalian citta-vritti",
+        desc:
+          "Latihan untuk mengarahkan pikiran dan indria agar stabil, sehingga menuju keadaan sadar yang lebih jernih."
+      },
+      {
+        id: 4,
+        judul: "Gerbang 4 — Mimamsa",
+        icon: "📜",
+        topic: "Dharma & Veda",
+        focus: "Penafsiran & pelaksanaan",
+        desc:
+          "Menekankan pemahaman dan praktik dharma melalui interpretasi ajaran berdasarkan Veda."
+      },
+      {
+        id: 5,
+        judul: "Gerbang 5 — Vedanta",
+        icon: "🔥",
+        topic: "Atman & Brahman",
+        focus: "Realitas terdalam",
+        desc:
+          "Menguatkan pemahaman tentang Atman dan realitas tertinggi untuk mencapai pembebasan."
+      }
+    ];
+
+    /***********************
+     * State
+     ***********************/
+    const state = {
+      started: false,
+      finished: false,
+      currentIndex: 0,
+      order: [],
+      correct: 0,
+      wrong: 0,
+      chosen: null,
+      certUnlocked: false,
+      firstUnlockAt: null,
+      lastResult: null
+    };
+
+    /***********************
+     * DOM Helpers
+     ***********************/
+    const $ = (id) => document.getElementById(id);
+
+    const pages = ["belajar", "peta", "petunjuk", "profil", "refleksi", "sertifikat"];
+    const pageTitles = {
+      belajar: ["Belajar — Sad Darsana (Kuil Suci)", "Kumpulkan pemahaman lewat kuis pendakian. Nyawa berkurang jika salah. Setiap benar naik tingkat! ✨"],
+      peta: ["Peta Candi — Gerbang Materi", "Review ringkas tiap darsana sebelum menjawab. Pilih gerbang untuk melihat fokus materi."],
+      petunjuk: ["Petunjuk Pendakian", "Cara bermain dan strategi singkat agar kamu bisa mencapai kelulusan 🎯."],
+      profil: ["Profil — Progress Belajarmu", "Lihat statistik hasil kuis dan status sertifikat."],
+      refleksi: ["Refleksi — Catatan Hati Pendaki", "Tuliskan refleksi pembelajaranmu setelah menjalani kuis."],
+      sertifikat: ["Sertifikat Kelulusan", "Sertifikat terbit otomatis ketika kriteria kelulusan terpenuhi. 🎓"]
+    };
+
+    function setPage(page){
+      pages.forEach(p=>{
+        const el = $("page-" + p);
+        if(el) el.classList.toggle("active", p===page);
+      });
+      // aria current
+      const buttons = document.querySelectorAll(".sidebar .btn");
+      buttons.forEach(b=>{
+        const isCurrent = b.dataset.page === page;
+        b.setAttribute("aria-current", isCurrent ? "page":"false");
+      });
+
+      $("mainTitle").textContent = pageTitles[page][0];
+      $("mainSubtitle").textContent = pageTitles[page][1];
+
+      // update UI lazy if needed
+      if(page === "profil") syncProfile();
+      if(page === "sertifikat") syncCertificatePreview();
+    }
+
+    /***********************
+     * Sparkles
+     ***********************/
+    (function initSparkles(){
+      const layer = $("sparkleLayer");
+      const count = 16;
+      for(let i=0;i<count;i++){
+        const s = document.createElement("div");
+        s.className = "sparkle";
+        const x = Math.random()*100;
+        const y = Math.random()*70;
+        const delay = Math.random()*1.6;
+        const size = 8 + Math.random()*10;
+        s.style.left = x + "vw";
+        s.style.top = y + "vh";
+        s.style.width = size + "px";
+        s.style.height = size + "px";
+        s.style.animationDelay = delay + "s";
+        layer.appendChild(s);
+      }
+    })();
+
+    /***********************
+     * Hearts / HUD / Level
+     ***********************/
+    function renderHearts(){
+      const el = $("heartsHUD");
+      el.innerHTML = "";
+      for(let i=0;i<game.maxHearts;i++){
+        const span = document.createElement("span");
+        span.className = "heart" + (i < state.hearts ? "" : " inactive");
+        span.textContent = "❤️";
+        el.appendChild(span);
+      }
+    }
+
+    function levelForXP(xp){
+      // dynamic threshold: base + (level-1)*gap ladder
+      let lvl = 1;
+      let remaining = xp;
+      while(true){
+        const needed = game.xpNeededBase + (lvl-1)*game.levelGap;
+        if(remaining < needed) break;
+        remaining -= needed;
+        lvl++;
+        if(lvl > 50) break;
+      }
+      // current level and progress within next
+      const nextNeeded = game.xpNeededBase + (lvl-1)*game.levelGap;
+      const currentInto = (() => {
+        let l=1, rem=xp;
+        while(true){
+          const n = game.xpNeededBase + (l-1)*game.levelGap;
+          if(rem < n) return {lvl:l, into:rem, next:n};
+          rem -= n; l++;
+          if(l>50) return {lvl:l, into:0, next:game.xpNeededBase};
+        }
+      })();
+      return { level: lvl, into: currentInto.into, nextNeeded: nextNeeded, currentInto: currentInto.into };
+    }
+
+    function renderLevelAndBar(){
+      const L = levelForXP(state.xp);
+      state.level = L.level;
+      $("levelHUD").textContent = state.level;
+      $("xpHUD").textContent = state.xp;
+      const next = Math.max(0, L.nextNeeded - L.into);
+      $("nextHUD").textContent = next + "→";
+
+      const pct = (L.nextNeeded === 0) ? 0 : (L.into / L.nextNeeded) * 100;
+      $("xpBar").style.width = pct.toFixed(1) + "%";
+      $("xpBar").style.display = "block";
+      $("xpBar").parentElement.style.opacity = 1;
+      $("xpBar").parentElement.style.height = "10px";
+      $("xpBar").style.height = "10px";
+      $("xpBar").style.borderRadius = "999px";
+      // Actually bar i is nested:
+      // We used <div class="bar"><i id="xpBar"></i></div> so style width is enough
+      $("xpBar").style.width = pct.toFixed(1) + "%";
+    }
+
+    function calcTier(){
+      // tier based on level + some progress
+      return Math.min(5, Math.max(1, Math.floor((state.currentIndex)/2) + 1));
+    }
+
+    function renderSteps(){
+      const steps = $("stepsUI");
+      steps.innerHTML = "";
+      for(let i=1;i<=5;i++){
+        const d = document.createElement("div");
+        d.className = "step" + (i <= calcTier() ? " active" : "");
+        d.title = "Tingkat " + i;
+        d.style.marginTop = (i===1?0:0) + "px";
+        d.textContent = "";
+        steps.appendChild(d);
+      }
+      // move pilgrim based on tier (visual)
+      const pilgrim = $("pilgrimUI");
+      const tier = calcTier();
+      const offsets = {1: 0, 2: 46, 3: 92, 4: 142, 5: 196};
+      const bottom = 8 + (offsets[tier] ?? 0);
+      pilgrim.style.bottom = bottom + "px";
+      pilgrim.style.transform = `translateX(-50%) scale(${1 + tier*0.02})`;
+      pilgrim.style.filter = `drop-shadow(0 ${12+ tier*2}px ${20+ tier*2}px rgba(37,99,235,.18))`;
+    }
+
+    function flashStars(){
+      const field = $("starField");
+      field.innerHTML = "";
+      const stars = 10;
+      for(let i=0;i<stars;i++){
+        const s = document.createElement("div");
+        s.className = "star";
+        s.style.left = (10 + Math.random()*80) + "%";
+        s.style.top = (10 + Math.random()*60) + "%";
+        s.style.animationDelay = (Math.random()*0.9) + "s";
+        s.style.animationDuration = (1.0 + Math.random()*1.0) + "s";
+        field.appendChild(s);
+      }
+      setTimeout(()=>{ field.innerHTML = ""; }, 1700);
+    }
+
+    /***********************
+     * Questions
+     ***********************/
+    function shuffle(arr){
+      const a = [...arr];
+      for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+      }
+      return a;
+    }
+
+    function initGameOrder(){
+      // Use all questions, shuffled
+      state.order = shuffle(game.questions.map((q)=>q.id));
+    }
+
+    function getQuestionById(id){
+      return game.questions.find(q => q.id === id);
+    }
+
+    function renderQuestion(){
+      const qId = state.order[state.currentIndex];
+      const q = getQuestionById(qId);
+
+      $("qTotalHUD").textContent = state.order.length;
+      $("qIndexHUD").textContent = state.currentIndex + 1;
+
+      $("tierHUD").textContent = Math.min(5, Math.max(1, q.tier ?? calcTier()));
+      $("questionText").textContent = q.soal;
+
+      $("balloonHint").textContent = state.started ? "Pilih jawabanmu! ✨" : "Siap jawab?";
+
+      const choices = $("choicesUI");
+      choices.innerHTML = "";
+
+      const letters = ["A","B","C","D"];
+      q.pilihan.forEach((text, idx)=>{
+        const btn = document.createElement("div");
+        btn.className = "choice";
+        btn.setAttribute("role","button");
+        btn.tabIndex = 0;
+        btn.setAttribute("aria-label", `Pilihan ${letters[idx]}`);
+        btn.innerHTML = `
+          <div class="letter">${letters[idx]}</div>
+          <div class="text">${text}</div>
+        `;
+        btn.addEventListener("click", ()=>handleChoice(idx));
+        btn.addEventListener("keydown", (e)=>{
+          if(e.key === "Enter" || e.key === " "){
+            e.preventDefault();
+            handleChoice(idx);
+          }
+        });
+        choices.appendChild(btn);
+      });
+
+      // buttons
+      $("nextBtn").style.display = "none";
+      $("restartBtn").style.display = "none";
+    }
+
+    function setChoicesDisabled(disabled){
+      document.querySelectorAll("#choicesUI .choice").forEach(el=>{
+        el.style.pointerEvents = disabled ? "none":"auto";
+        el.style.opacity = disabled ? ".75":"1";
+      });
+    }
+
+    function handleChoice(choiceIndex){
+      if(state.finished) return;
+      if(!state.started) return;
+
+      const qId = state.order[state.currentIndex];
+      const q = getQuestionById(qId);
+
+      if(state.chosen !== null) return; // already answered
+      state.chosen = choiceIndex;
+
+      const isCorrect = choiceIndex === q.benar;
+
+      const choiceEls = Array.from(document.querySelectorAll("#choicesUI .choice"));
+      choiceEls.forEach((el, idx)=>{
+        el.classList.remove("correct","wrong");
+        if(idx === q.benar) el.classList.add("correct");
+        if(idx === choiceIndex && !isCorrect) el.classList.add("wrong");
+      });
+
+      setChoicesDisabled(true);
+
+      if(isCorrect){
+        state.correct++;
+        state.xp += game.xpPerCorrect;
+        $("balloonHint").textContent = "Benar! Satria melompat! 🏯✨";
+        flashStars();
+        // hearts unchanged
+      }else{
+        state.wrong++;
+        state.hearts = Math.max(0, state.hearts - 1);
+        $("balloonHint").textContent = "Wah, coba lagi! Nyawa berkurang ❤️";
+      }
+
+      // update HUD
+      renderHearts();
+      renderLevelAndBar();
+      renderSteps();
+
+      // progress
+      if(isCorrect){
+        // small pilgrim pop by forcing transform
+        const pilgrim = $("pilgrimUI");
+        pilgrim.style.transform = `translateX(-50%) scale(1.08)`;
+        setTimeout(()=> pilgrim.style.transform = `translateX(-50%) scale(${1 + calcTier()*0.02})`, 260);
+      }
+
+      // next or end
+      const lastQuestion = state.currentIndex >= state.order.length - 1;
+
+      if(isCorrect && lastQuestion){
+        // finish
+        finishGame();
+      } else if(state.hearts <= 0){
+        // game over
+        state.lastResult = { completed:false, reason:"nyawa_habis" };
+        finishGame(true);
+      } else {
+        // allow next
+        $("nextBtn").style.display = "inline-block";
+        $("nextBtn").disabled = false;
+      }
+    }
+
+    function finishGame(forceGameOver=false){
+      state.finished = true;
+      const passed = (state.correct >= game.requiredCorrect && state.xp >= game.requiredXP && state.hearts >= game.requiredHeartsLeft);
+
+      if(!forceGameOver){
+        state.lastResult = { completed:true, passed };
+      }
+
+      // unlock certificate if passed
+      if(!forceGameOver && passed){
+        unlockCertificate();
+      }
+
+      // update balloon UI
+      if(forceGameOver || !passed){
+        $("balloonHint").textContent = passed ? "Hampir! 🎉" : "Pendakian berhenti — coba lagi ya!";
+      } else {
+        $("balloonHint").textContent = "Selamat! Kamu mencapai kelulusan! 🎉✨";
+      }
+
+      // hide next, show restart
+      $("nextBtn").style.display = "none";
+      $("restartBtn").style.display = "inline-block";
+      $("restartBtn").disabled = false;
+
+      // reflect to profile page if user navigates later
+      syncProfile();
+      syncCertificatePreview();
+      updateCertMenuChip();
+      // move steps to max visual
+      calcTier = () => 5; // not needed; keep simple
+      renderSteps();
+    }
+
+    function unlockCertificate(){
+      if(state.certUnlocked) return;
+      state.certUnlocked = true;
+      state.firstUnlockAt = Date.now();
+      const result = buildCertificateData(true);
+      localStorage.setItem("mpiSadDarsana_state", JSON.stringify({
+        ...exportProgress(),
+        certUnlocked: true,
+        certData: result,
+        certAt: state.firstUnlockAt
+      }));
+    }
+
+    function exportProgress(){
+      return {
+        userName: getStoredUserName(),
+        hearts: state.hearts,
+        xp: state.xp,
+        level: state.level,
+        correct: state.correct,
+        wrong: state.wrong,
+        finished: state.finished,
+        completed: state.lastResult?.completed ?? false,
+        passed: state.lastResult?.passed ?? false,
+        certUnlocked: state.certUnlocked
+      };
+    }
+
+    function buildCertificateData(passed){
+      const date = new Date();
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth()+1).padStart(2,"0");
+      const dd = String(date.getDate()).padStart(2,"0");
+
+      const codeSeed = (state.correct*97 + state.wrong*13 + state.xp*7 + state.hearts*31) + "-" + (getStoredUserName() || "USER");
+      const code = "SD-" + Math.abs(hashCode(codeSeed)).toString(16).toUpperCase().slice(0,8);
+
+      return {
+        issued: passed,
+        code,
+        name: getStoredUserName(),
+        score: `${state.correct}/${state.order.length}`,
+        xp: state.xp,
+        level: state.level,
+        date: `${dd}/${mm}/${yyyy}`,
+        criteria: { requiredCorrect: game.requiredCorrect, requiredXP: game.requiredXP, requiredHeartsLeft: game.requiredHeartsLeft }
+      };
+    }
+
+    function unlockIfPossibleFromStored(){
+      // nothing; just for load
+    }
+
+    /***********************
+     * Persistence
+     ***********************/
+    function setStoredUserName(name){
+      localStorage.setItem("mpiSadDarsana_user", name);
+    }
+    function getStoredUserName(){
+      return localStorage.getItem("mpiSadDarsana_user") || "";
+    }
+    function saveReflection(text){
+      localStorage.setItem("mpiSadDarsana_reflection", text);
+    }
+    function loadReflection(){
+      return localStorage.getItem("mpiSadDarsana_reflection") || "";
+    }
+
+    function loadProgress(){
+      const raw = localStorage.getItem("mpiSadDarsana_state");
+      if(!raw) return null;
+      try{ return JSON.parse(raw); }catch{ return null; }
+    }
+
+    function applyLoadedProgress(){
+      const loaded = loadProgress();
+      if(!loaded) return;
+
+      state.hearts = typeof loaded.hearts === "number" ? loaded.hearts : state.hearts;
+      state.xp = typeof loaded.xp === "number" ? loaded.xp : state.xp;
+      state.level = typeof loaded.level === "number" ? loaded.level : state.level;
+      state.correct = typeof loaded.correct === "number" ? loaded.correct : 0;
+      state.wrong = typeof loaded.wrong === "number" ? loaded.wrong : 0;
+      state.finished = !!loaded.finished;
+      state.certUnlocked = !!loaded.certUnlocked;
+
+      // If cert exists, keep UI
+      if(loaded.certData){
+        localStorage.setItem("mpiSadDarsana_certData", JSON.stringify(loaded.certData));
+      }
+      updateCertMenuChip();
+    }
+
+    /***********************
+     * Certificate UI Sync
+     ***********************/
+    function syncCertificatePreview(){
+      const dataRaw = localStorage.getItem("mpiSadDarsana_certData");
+      const data = dataRaw ? JSON.parse(dataRaw) : null;
+
+      const requiredCorrect = game.requiredCorrect;
+      const requiredXP = game.requiredXP;
+      const requiredHeartsLeft = game.requiredHeartsLeft;
+
+      // show needs
+      $("certNeedCorrect").textContent = `${state.correct}/${requiredCorrect}`;
+      $("certNeedXP").textContent = `${state.xp}/${requiredXP}`;
+      $("certNeedHearts").textContent = `${state.hearts}/${requiredHeartsLeft}`;
+
+      if(data && data.issued){
+        $("certIssued").textContent = "Status: Terbit ✅";
+        $("certCode").textContent = "Kode: " + data.code;
+        $("certName").textContent = data.name || getStoredUserName() || "-";
+        $("certScore").textContent = "Skor: " + data.score;
+        $("certXP").textContent = "XP: " + data.xp;
+        $("certLevel").textContent = "Level: " + data.level;
+        $("certDate").textContent = "Tanggal: " + data.date;
+        $("printCertBtn").disabled = false;
+      }else{
+        $("certIssued").textContent = "Status: Menunggu...";
+        $("certCode").textContent = "Kode: —";
+        $("certName").textContent = getStoredUserName() || "—";
+        $("certScore").textContent = "Skor: " + `${state.correct}/${state.order.length||game.questions.length}`;
+        $("certXP").textContent = "XP: " + state.xp;
+        $("certLevel").textContent = "Level: " + state.level;
+        $("certDate").textContent = "Tanggal: —";
+        $("printCertBtn").disabled = true;
+      }
+    }
+
+    function updateCertMenuChip(){
+      const chip = $("certChip");
+      const issued = !!state.certUnlocked || (localStorage.getItem("mpiSadDarsana_certData") && JSON.parse(localStorage.getItem("mpiSadDarsana_certData")).issued);
+      if(issued){
+        chip.textContent = "Terbit ✅";
+        chip.style.background = "rgba(34,197,94,.18)";
+        chip.style.borderColor = "rgba(34,197,94,.35)";
+        chip.style.color = "#0b5a2a";
+      }else{
+        chip.textContent = "Belum";
+        chip.style.background = "rgba(246,196,83,.25)";
+        chip.style.borderColor = "rgba(246,196,83,.35)";
+        chip.style.color = "#7a4a00";
+      }
+    }
+
+    function printCertificate(){
+      const dataRaw = localStorage.getItem("mpiSadDarsana_certData");
+      const data = dataRaw ? JSON.parse(dataRaw) : null;
+      if(!data || !data.issued) return alert("Sertifikat belum terbit. Selesaikan kuis sampai memenuhi kriteria! 🎯");
+
+      const certEl = $("certPreview");
+      const newWin = window.open("", "_blank");
+      newWin.document.write(`
+        <html>
+        <head>
+          <title>Sertifikat MPI Sad Darsana</title>
+          <style>
+            body{ font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; padding:20px; }
+            .wrap{ max-width:900px; margin:0 auto; }
+            ${getComputedStyle(document.body).background ? "" : ""}
+            .box{
+              border:1px solid #d6b15c;
+              border-radius:18px;
+              padding:18px;
+              background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(246,196,83,.10));
+              position:relative;
+            }
+            .seal{
+              position:absolute; right:14px; bottom:14px;
+              width:92px; height:92px;
+              border-radius:28px;
+              background: rgba(59,130,246,.14);
+              border:2px solid rgba(246,196,83,.55);
+              display:flex; align-items:center; justify-content:center;
+              font-size:36px;
+              transform: rotate(-8deg);
+            }
+            h2{ margin:0; font-size:20px; }
+            p{ color:#47607d; font-weight:800; }
+            .name{
+              font-size:24px; font-weight:1200;
+              background: linear-gradient(90deg, #3B82F6, #7c3aed, #F6C453);
+              -webkit-background-clip:text; background-clip:text; color:transparent;
+            }
+            .pill{ display:inline-block; padding:9px 12px; border-radius:999px; border:1px solid rgba(59,130,246,.16);
+              background: rgba(255,255,255,.72); color:#47607d; font-weight:1000; font-size:12px; margin:6px 6px 0 0; }
+          </style>
+        </head>
+        <body>
+          <div class="wrap">
+            <div class="box">
+              <div style="display:flex; justify-content:space-between; gap:12px; border-bottom:1px dashed rgba(59,130,246,.25); padding-bottom:12px;">
+                <div>
+                  <h2>🎓 Sertifikat Kelulusan MPI Sad Darsana</h2>
+                  <p>Ekspedisi Candi Lontar • Pendakian Kuil Suci</p>
+                </div>
+                <div style="text-align:right;">
+                  <div class="pill">Status: Terbit ✅</div>
+                  <div class="pill">Kode: ${data.code}</div>
+                </div>
+              </div>
+              <div style="padding:8px 0 6px;">
+                <div style="font-weight:1000;">Diberikan kepada:</div>
+                <div class="name">${data.name}</div>
+                <div style="margin-top:10px; font-weight:900; color:#0b1b3a; line-height:1.6;">
+                  Telah menyelesaikan kuis pendakian Sad Darsana dengan hasil memenuhi kriteria kelulusan.
+                </div>
+                <div style="margin-top:10px;">
+                  <span class="pill">Skor: ${data.score}</span>
+                  <span class="pill">XP: ${data.xp}</span>
+                  <span class="pill">Level: ${data.level}</span>
+                  <span class="pill">Tanggal: ${data.date}</span>
+                </div>
+              </div>
+              <div class="seal">🪷</div>
+            </div>
+            <div style="margin-top:14px; color:#47607d; font-weight:850; font-size:12px;">
+              Dokumen dicetak dari browser. (MPI interaktif)
+            </div>
+          </div>
+          <script>window.onload = () => window.print();<\/script>
+        </body>
+        </html>
+      `);
+      newWin.document.close();
+    }
+
+    /***********************
+     * Profile Sync
+     ***********************/
+    function syncProfile(){
+      $("profileName").textContent = getStoredUserName() || "—";
+      const certDataRaw = localStorage.getItem("mpiSadDarsana_certData");
+      const certData = certDataRaw ? JSON.parse(certDataRaw) : null;
+      const issued = !!certData?.issued;
+
+      $("profileCertStatus").textContent = issued ? "Terbit ✅" : "Belum";
+      $("profileCorrect").textContent = state.correct;
+      $("profileWrong").textContent = state.wrong;
+      $("profileXP").textContent = state.xp;
+      $("profileLevel").textContent = state.level;
+    }
+
+    /***********************
+     * Event wiring
+     ***********************/
+    document.querySelectorAll(".sidebar .btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        setPage(btn.dataset.page);
+      });
+    });
+
+    $("startBtn").addEventListener("click", ()=>{
+      if(state.started && !state.finished) return;
+
+      // If already finished, restart
+      if(state.finished){
+        resetGame();
+      }
+
+      state.started = true;
+      state.finished = false;
+      state.currentIndex = 0;
+      state.correct = 0;
+      state.wrong = 0;
+      state.hearts = game.maxHearts;
+      state.xp = 0;
+      state.level = 1;
+      state.chosen = null;
+
+      // keep order fixed per session start
+      initGameOrder();
+      $("nextBtn").style.display = "none";
+      $("restartBtn").style.display = "none";
+
+      $("qTotalHUD").textContent = game.questions.length;
+      $("sessionChip").textContent = "Sedang Mendaki! ⛰️";
+      $("balloonHint").textContent = "Soal 1 menanti kamu! ✨";
+
+      // reset cert unlocked? keep as previously earned
+      renderHearts();
+      renderLevelAndBar();
+      state.certUnlocked = state.certUnlocked; // keep
+      renderSteps();
+
+      state.chosen = null;
+      renderQuestion();
+    });
+
+    $("nextBtn").addEventListener("click", ()=>{
+      if(!state.started || state.finished) return;
+      state.currentIndex++;
+      state.chosen = null;
+
+      if(state.currentIndex >= state.order.length){
+        finishGame();
+        return;
+      }
+      $("balloonHint").textContent = "Lanjut! Kamu bisa! ✨";
+      renderSteps();
+      renderQuestion();
+    });
+
+    $("restartBtn").addEventListener("click", ()=>{
+      resetGame();
+    });
+
+    function resetGame(){
+      state.started = false;
+      state.finished = false;
+      state.currentIndex = 0;
+      state.correct = 0;
+      state.wrong = 0;
+      state.chosen = null;
+      state.hearts = game.maxHearts;
+      state.xp = 0;
+      state.level = 1;
+
+      $("sessionChip").textContent = "Siap Mendaki!";
+      $("balloonHint").textContent = "Siap jawab?";
+      $("questionText").textContent = "Klik “Mulai Pendakian” untuk memulai.";
+      $("choicesUI").innerHTML = "";
+      $("nextBtn").style.display = "none";
+      $("restartBtn").style.display = "none";
+      renderHearts();
+      renderLevelAndBar();
+      // set tier to 1
+      renderSteps();
+      syncProfile();
+    }
+
+    /***********************
+     * Peta
+     ***********************/
+    function renderCandiList(){
+      const list = $("candiListUI");
+      list.innerHTML = "";
+      candiNodes.forEach((node)=>{
+        const div = document.createElement("div");
+        div.className = "candiNode";
+        div.setAttribute("role","button");
+        div.tabIndex = 0;
+        div.innerHTML = `
+          <div class="row">
+            <div style="display:flex; gap:10px; align-items:flex-start;">
+              <div class="candiIcon" aria-hidden="true">${node.icon}</div>
+              <div>
+                <strong>${node.judul}</strong>
+                <small>${node.topic}</small>
+              </div>
+            </div>
+            <span class="chip">Gerbang ${node.id}</span>
+          </div>
+        `;
+        div.addEventListener("click", ()=>selectCandi(node.id));
+        div.addEventListener("keydown",(e)=>{
+          if(e.key==="Enter" || e.key===" "){
+            e.preventDefault(); selectCandi(node.id);
+          }
+        });
+        list.appendChild(div);
+      });
+    }
+
+    let selectedCandiId = 1;
+    function selectCandi(id){
+      selectedCandiId = id;
+      const node = candiNodes.find(n=>n.id===id);
+      // active
+      document.querySelectorAll(".candiNode").forEach((el, idx)=>{
+        const nid = candiNodes[idx].id;
+        el.classList.toggle("active", nid===id);
+      });
+
+      $("previewTitle").textContent = node.judul;
+      $("previewDesc").textContent = node.desc;
+      $("previewTopic").textContent = "Topik: " + node.topic;
+      $("previewFocus").textContent = "Fokus: " + node.focus;
+      $("previewStamp").textContent = node.icon;
+    }
+
+    $("goFromMapBtn").addEventListener("click", ()=>{
+      setPage("belajar");
+      // nudge UI
+      $("sessionChip").textContent = "Lanjut Kuis dari Peta! 🗺️➡️";
+    });
+
+    /***********************
+     * Refleksi
+     ***********************/
+    $("saveReflectionBtn").addEventListener("click", ()=>{
+      const text = $("reflectionText").value.trim();
+      if(!text) return alert("Tulis refleksi dulu ya! 📝");
+      saveReflection(text);
+      alert("Refleksi tersimpan! ✨");
+    });
+    $("clearReflectionBtn").addEventListener("click", ()=>{
+      if(!confirm("Hapus refleksi yang tersimpan?")) return;
+      $("reflectionText").value = "";
+      saveReflection("");
+      alert("Refleksi dihapus. 🧹");
+    });
+
+    function loadReflectionToUI(){
+      $("reflectionText").value = loadReflection();
+    }
+
+    /***********************
+     * User Name init
+     ***********************/
+    function askUserName(){
+      let name = getStoredUserName();
+      if(name && name.trim()){
+        $("userNameInline").textContent = name;
+        $("userMetaInline").textContent = "Mari pelajari Sad Darsana dengan cara interaktif!";
+        return;
+      }
+      name = prompt("Masukkan nama pengguna untuk sapaan awal: ", "Siswa");
+      if(!name) name = "Siswa";
+      name = name.trim();
+      setStoredUserName(name);
+      $("userNameInline").textContent = name;
+      $("userMetaInline").textContent = "Selamat datang di Pendakian Candi Lontar!";
+    }
+
+    /***********************
+     * Certificate menu print
+     ***********************/
+    $("printCertBtn").addEventListener("click", printCertificate);
+    $("toBelajarBtn").addEventListener("click", ()=>setPage("belajar"));
+
+    /***********************
+     * Next: star/tiers for start
+     ***********************/
+    function initUI(){
+      renderHearts();
+      renderLevelAndBar();
+      renderSteps();
+
+      // Set total
+      $("qTotalHUD").textContent = game.questions.length;
+
+      // render candi
+      renderCandiList();
+      selectCandi(1);
+      // set q total
+      $("qTotalHUD").textContent = game.questions.length;
+
+      // load reflection
+      loadReflectionToUI();
+
+      // load progress & certificate
+      applyLoadedProgress();
+      syncProfile();
+      syncCertificatePreview();
+      updateCertMenuChip();
+    }
+
+    /***********************
+     * Bootstrap
+     ***********************/
+    (function boot(){
+      askUserName();
+      initUI();
+    })();
+  </script>
+</body>
+</html>
